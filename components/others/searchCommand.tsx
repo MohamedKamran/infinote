@@ -36,7 +36,7 @@ const SearchCommand = (props: Props) => {
   useEffect(() => {
     setIsmounted(true);
     trigger.activate();
-  }, []);
+  }, [trigger]);
 
   useEffect(() => {
     const fetchdata = async () => {
