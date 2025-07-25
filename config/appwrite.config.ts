@@ -1,13 +1,13 @@
 import { Account, Avatars, Client, Databases, Storage } from "appwrite";
 
 export const appwriteConfig = {
-  url: process.env.NEXT_PUBLIC_URL as string,
-  projectId: process.env.NEXT_PUBLIC_PROJECT_ID as string,
-  databaseId: process.env.NEXT_PUBLIC_DATABASE_ID as string,
-  usersCollectionId: process.env.NEXT_PUBLIC_USER_COLLECTION_ID as string,
+  url: process.env.NEXT_PUBLIC_URL || "https://localhost",
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID || "defaultProject",
+  databaseId: process.env.NEXT_PUBLIC_DATABASE_ID || "defaultDatabase",
+  usersCollectionId: process.env.NEXT_PUBLIC_USER_COLLECTION_ID || "defaultUsers",
   documentsCollectionId: process.env
-    .NEXT_PUBLIC_API_DOCUMENTS_COLLECTION_ID as string,
-  storageId: process.env.NEXT_PUBLIC_STORAGE_ID as string,
+    .NEXT_PUBLIC_API_DOCUMENTS_COLLECTION_ID || "defaultDocuments",
+  storageId: process.env.NEXT_PUBLIC_STORAGE_ID || "defaultStorage",
 };
 
 const client = new Client()

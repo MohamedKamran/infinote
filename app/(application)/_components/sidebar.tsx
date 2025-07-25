@@ -9,7 +9,7 @@ import {
   Settings,
 } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import React, { ElementRef, useEffect, useRef, useState } from "react";
+import React, { ElementRef, useCallback, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItem from "./userItem";
 import { useAuthContext } from "@/context/AuthContext";
@@ -47,19 +47,48 @@ const Sidebar = (props: Props) => {
   const trigger = useTrigger();
   const router = useRouter();
 
+  const resetWidth = useCallback(() => {
+    if (sidebarRef.current && navbarRef.current) {
+      setCollapsed(false);
+      setReset(true);
+
+      sidebarRef.current.style.width = isMobile ? "100%" : "240px";
+      navbarRef.current.style.setProperty(
+        "width",
+        isMobile ? "0" : "calc(100% - 240px)"
+      );
+      navbarRef.current.style.setProperty("left", isMobile ? "100%" : "240px");
+
+      setTimeout(() => setReset(false), 300);
+    }
+  }, [isMobile]);
+
+  const handleCollapse = useCallback(() => {
+    if (sidebarRef.current && navbarRef.current) {
+      setCollapsed(true);
+      setReset(true);
+
+      sidebarRef.current.style.width = "0";
+      navbarRef.current.style.setProperty("width", "100%");
+      navbarRef.current.style.setProperty("left", "0");
+
+      setTimeout(() => setReset(false), 300);
+    }
+  }, []);
+
   useEffect(() => {
     if (isMobile) {
       handleCollapse();
     } else {
       resetWidth();
     }
-  }, [isMobile]);
+  }, [isMobile, handleCollapse, resetWidth]);
 
   useEffect(() => {
     if (isMobile) {
       handleCollapse();
     }
-  }, [pathname, isMobile]);
+  }, [pathname, isMobile, handleCollapse]);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
@@ -91,35 +120,6 @@ const Sidebar = (props: Props) => {
     isResizeRef.current = false;
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
-  };
-
-  const resetWidth = () => {
-    if (sidebarRef.current && navbarRef.current) {
-      setCollapsed(false);
-      setReset(true);
-
-      sidebarRef.current.style.width = isMobile ? "100%" : "240px";
-      navbarRef.current.style.setProperty(
-        "width",
-        isMobile ? "0" : "calc(100% - 240px)"
-      );
-      navbarRef.current.style.setProperty("left", isMobile ? "100%" : "240px");
-
-      setTimeout(() => setReset(false), 300);
-    }
-  };
-
-  const handleCollapse = () => {
-    if (sidebarRef.current && navbarRef.current) {
-      setCollapsed(true);
-      setReset(true);
-
-      sidebarRef.current.style.width = "0";
-      navbarRef.current.style.setProperty("width", "100%");
-      navbarRef.current.style.setProperty("left", "0");
-
-      setTimeout(() => setReset(false), 300);
-    }
   };
 
   const handleCreate = () => {
